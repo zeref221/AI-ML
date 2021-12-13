@@ -1,0 +1,67 @@
+#Copy Paste Each cell one by one in jupyter
+#If using diferrent platform and want ONLY CODE use ctrl f "In" and delete every In
+
+In [1]:
+from sklearn.cluster import KMeans
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+from matplotlib import pyplot as plt
+%matplotlib inline
+
+In [2]:
+df=pd.read_csv('Dataset.csv')
+
+In [3]:
+df.head()
+
+
+In [4]:
+df.drop(['Patient Id', 'Age', 'Air Pollution','OccuPational Hazards','Coughing of Blood','Shortness of Breath','Level'],axis='columns',inplace=True)
+
+In [5]:
+df.head()
+
+
+Elbow method¶
+
+In [6]:
+sse = []
+k_rng = range(1,20)
+for k in k_rng:
+    km = KMeans(n_clusters=k)
+    km.fit(df)
+    sse.append(km.inertia_)
+
+
+In [7]:
+plt.xlabel('K')
+plt.ylabel('Sum of squared error')
+plt.plot(k_rng,sse)
+
+In [8]:
+km = KMeans(n_clusters=4)
+yp = km.fit_predict(df)
+yp
+
+In [9]:
+df['cluster'] = yp
+df.head(60)
+
+
+In [10]:
+df.cluster.unique()
+
+
+In [11]:
+df1 = df[df.cluster==0]
+df2 = df[df.cluster==1]
+df3 = df[df.cluster==2]
+df4 = df[df.cluster==3]
+
+In [12]:
+plt.scatter(df1['Alcohol use'],df1['Smoking'],color='blue')
+plt.scatter(df2['Alcohol use'],df2['Smoking'],color='green')
+plt.scatter(df3['Alcohol use'],df3['Smoking'],color='red')
+plt.scatter(df4['Alcohol use'],df4['Smoking'],color='orange')
+
+ 
